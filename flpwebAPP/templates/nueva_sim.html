@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box">
+  <div class="container mb-5">
+      <div class="elements">     
+        {% if form %}
+        <h2 class="mb-4" style="text-align: center;">Registro de simulación</h2>
+        <div class="row justify-align-content-center">
+          <div class="col-lg-12" style="justify-content: center;">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row" style="justify-content: center;">
+                  <div class="col-12">
+                    <p style="text-align: center;">
+                      {{ form.nombre.label_tag }} {{ form.nombre }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="row" style="justify-content: center;">
+                  <div class="col-10">
+                    <h5 style="text-align: center;">Seleccione los métodos deseados</h5>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p style="text-align: center;">
+                      {{ form.met_manual.label_tag }} {{ form.met_manual }}
+                    </p>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p style="text-align: center;">
+                      {{ form.met_gmwm.label_tag }} {{ form.met_gmwm }}
+                    </p>
+                  </div>
+                  <div class="col-10">
+                    <p id="message" style="color:darkred; text-align: center;"></p>
+                  </div>
+                <div class="row" style="justify-content: center;">
+                  <div class="col-12 col-md-6">
+                    <p style="text-align: center;">
+                      {{ form.met_sdwm.label_tag }} {{ form.met_sdwm }}
+                    </p>
+                    
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <p style="text-align: center;">
+                      {{ form.met_criticm.label_tag }} {{ form.met_criticm }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="row" style="justify-content: center;">
+                  <div class="col-12">
+                    <p style="text-align: center;">
+                      {{ form.no_instalaciones.label_tag }} {{ form.no_instalaciones }}
+                    </p>
+                    <p style="text-align: center;">
+                      {{ form.cantidad_matrices.label_tag }} {{ form.cantidad_matrices }}
+                    </p>
+                    <h5 class="mb-4" style="text-align: center;">Ingrese parametros recocido simulado</h5>
+                    <p style="text-align: center;">
+                      {{ form.lambda1.label_tag }} {{ form.lambda1 }}
+                    </p>
+                    <p style="text-align: center;">
+                      {{ form.lambda2.label_tag }} {{ form.lambda2 }}
+                    </p>
+                    <p style="text-align: center;">
+                      {{ form.iteraciones.label_tag }} {{ form.iteraciones }}
+                    </p>
+                  </div>
+                </div>
+                
+
+                
+                
+                
+                <div class="submit">
+                  <button type="submit" name="continuar" class="btn btn-primary">Continuar</button>
+                </div>
+            </form>
+
+          </div>
+        </div>
+        {% endif %}
+      </div>
+  </div>
+</div>
+
+
+<script>
+  $(document).ready(function(){
+      $("#id_met_gmwm").click(function(){
+          if(this.checked){
+            $("#message").html("Recuerde que al utilizar este método, TODOS los elementos de las matrices objetivo que no estén en la diagonal principal, deben ser diferentes de 0");
+          }else{
+              $("#message").html(" ");
+          }
+      });
+  });
+  </script>
+
+
+
+
+
+
+
+
+{% endblock %}
+

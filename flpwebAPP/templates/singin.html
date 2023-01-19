@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="box">
+        <div class="container">
+            <div class="elements">
+                <h2>INICIO SESI&Oacute;N</h2>
+                <br>
+                <p>{{error}}</p>
+                <form action="/singin/" method="POST" name="user_login" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="nombreusuario">Nombre usuario</label>
+                            <input type="text" class="form-control" name="nombreusuario" id="nombreusuario"
+                                placeholder="Escriba el nombre completo">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="passwordusuario">Contrase&ntilde;a</label>
+                            <input type="password" class="form-control" name="passwordusuario" id="passwordusuario"
+                                placeholder="Escriba la contrase&ntilde;a">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="submit">
+                        <button type="submit" name="user_login" class="btn btn-primary">Iniciar sesi&oacute;n</button>
+                    </div>
+                    <center><a href="{% url 'restorepassword' %}">¿Olvid&oacute; su contrase&ntilde;a?</a></center>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

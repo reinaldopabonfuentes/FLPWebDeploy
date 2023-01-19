@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box">
+    <div class="container mt-0" style="height: auto;">
+        {% if user.is_authenticated %}
+        <div class="row justify-content-center">
+            <div class="col-8 col-lg-12">
+                <div class="">
+                    <h1 class="mb-4"> Bienvenido a la página FLPWEB</h1>
+                    <p>Los problemas de distribución de planta (Facility Layout Problem, FLP) son una familia de problemas de diseño que incluye la partición de una región planar en departamentos o superficies de trabajo de área conocida, con el fin de minimizar los costos asociados con interacciones proyectadas entre estos departamentos. Estos costos pueden reflejar los concernientes al manejo de materiales o las preferencias con respecto a la contigüidad entre departamentos. El problema de distribución de planta es uno de los más complicados dentro de los de optimización combinatoria y multi-criterio. Para abordarlos, se han empleado técnicas inteligentes como sistemas expertos, lógica difusa, algoritmos genéticos y redes neuronales.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6">
+                <div class="submit">
+                    <a href="/nueva_sim"><button type="button"  class="btn btn-primary">Nueva Simulación</button></a>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="submit">
+                    <a href="/simulations"><button type="button"  class="btn btn-primary">Historial de simulaciones</button></a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row justify-content-center">
+            <div class="col-8 col-lg-12">
+                    <h1 class="mb-4"> Bienvenido a la página FLPWEB</h1>
+                    <p>FLPWeb es una herramienta que permite encontrar una buena distribución de instalaciones en los espacios disponibles en una planta. FLPWeb está pensada para resolver el Problema de Distribución de Planta (FLP) derivado de un análisis de flujo de trabajo e implementando un algoritmo de recocido simulado, esto para la solución de un problema de optimización Multiobjetivo mediante ponderación de funciones.</p>
+                    <p>Por otro lado, FLPWeb permite a quienes estén interesados en el problema de diseño de instalaciones o FLP poner en práctica los conocimientos teóricos adquiridos y mejorar su rendimiento profesional. En los módulos que encontrará a continuación podrá cargar los datos de las matrices relacionadas con los objetivos que usted desee evaluar, además, escoger los métodos de ponderación objetivos y también ingresar o modificar los parámetros del algoritmo recocido simulado.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

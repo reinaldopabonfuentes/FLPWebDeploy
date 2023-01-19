@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box">
+  <div class="container mb-5 pt-0 px-4">
+    <div class="elements">
+      <div class="row d-flex justify-content-center">
+        <div class="col-12 ">
+          <h2 class="text-center">La Simulación se hará con los siguientes datos</h2>
+          <p style="font-size: 20px;" class="text-center">Simulacion {{sim.nombre }} - ID : {{ sim.id }}</p>
+
+
+          <div class="row justify-content-center mb-4">
+            <div class="col-auto">
+              <div class="card text-center" style="width: 18rem; background-color: #e9ecef;">
+                <div class="card-header">
+                  Métodos de Cálculo de Objetivos Aplicados
+                </div>
+                <ul class="list-group list-group-flush">
+                  {% for metodo in metodosUsadosString %}
+                  <li class="list-group-item">{{ metodo }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-auto">
+              <div class="card text-center" style="width: 18rem; background-color: #e9ecef;">
+                <div class="card-header">
+                  Parámetros de la metaheurística Recursivo Simulado
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Lambda 1: {{sim.lambda1}}</li>
+                  <li class="list-group-item">Lambda 2: {{sim.lambda2}}</li>
+                  <li class="list-group-item">Cantidad de iteraciones: {{sim.iteraciones}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <div class="submit">
+                <a href="{% url 'editar_sim' id_sim %}" class="btn btn-warning" id='{{sim.id}}'>Editar Simulacion</a>
+              </div>
+            </div>
+
+            <div class="col-auto">
+              <div class="submit">
+                <a href="{% url 'editar_matrices' id_sim num_mats usa_man matriz_size %}" class="btn btn-warning">Editar Matrices</a>
+              </div>
+            </div>
+
+            <div class="col-auto">
+              {% if soloMan is True and checkPesosManuales is True%}
+              <div class="submit">
+                <a href="{% url 'calculos' id_sim 0 %}" class="btn btn-primary">Obtener Resultados</a>
+              </div>
+              {% else %}
+              <div class="submit">
+                <a href="{% url 'calculos' id_sim 1 %}" class="btn btn-primary">Obtener Pesos Objetivos</a>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="row justify-content-center">
+  <div class="col-lg-11 col-12">
+    <h1 class="mb-4" style="text-align: center;">Datos de las Matrices</h1>
+
+
+    <table class="table table-striped" style="text-align: center; border: solid 1px; border-color: #dee2e6;">
+      <thead>
+        <tr style="background-color: #fbf8f8;">
+          <th scope="col">Nombre</th>
+          <th scope="col">Matriz</th>
+          <th scope="col" style="max-width: 120px;">Signo</th>
+          <th scope="col">Tipo de Matriz</th>
+          <th scope="col">Reindexar</th>
+          <!-- <th scope="col">Pesos</th> -->
+          <th scope="col">Pesos Metodo Manual</th>
+          <!-- <th scope="col" style="text-align: center;">Acci&oacute;n</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for id_matriz,nombre,matrix,signo,tipo,reindex,valorPesosManuales in resultados %}
+        <tr>
+          <th>{{nombre}}</th>
+          <td>
+            <div class="row justify-content-center">
+              <div class="col-auto">
+                <table>
+                  {% for row in matrix %}
+                  <tr>
+                    {% for cell in row %}
+                    <td style="border: groove;">
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+            </div>
+          </td>
+          <td>{{signo}}</td>
+          <td>{{tipo}}</td>
+          <td>{{reindex}}</td>
+          <td>
+            {% if checkPesosManuales %}
+            {{valorPesosManuales|floatformat:4}}
+            {% endif %}
+          </td>
+          <!-- <td>
+            <a href="{ url 'editar_matriz' id_matriz id_sim }">Editar</a>
+          </td> -->
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+  </div>
+</div>
+
+
+<script>
+  window.onload = (event) => {
+    console.log("page is fully loaded");
+    AmagiLoader.hide();
+  };
+  window.onbeforeunload = function (e) {
+    console.log("Se está cargando");
+    AmagiLoader.show();
+  };
+
+  const AmagiLoader = {
+    __loader: null,
+    show: function () {
+
+      if (this.__loader == null) {
+        var divContainer = document.createElement('div');
+        divContainer.style.position = 'fixed';
+        divContainer.style.left = '0';
+        divContainer.style.top = '0';
+        divContainer.style.width = '100%';
+        divContainer.style.height = '100%';
+        divContainer.style.zIndex = '9998';
+        divContainer.style.backgroundColor = 'rgba(250, 250, 250, 0.80)';
+
+        var div = document.createElement('div');
+        div.style.position = 'absolute';
+        div.style.left = '50%';
+        div.style.top = '50%';
+        div.style.zIndex = '9999';
+        div.style.height = '64px';
+        div.style.width = '64px';
+        div.style.margin = '-76px 0 0 -76px';
+        div.style.border = '8px solid #e1e1e1';
+        div.style.borderRadius = '50%';
+        div.style.borderTop = '8px solid #0d6efd';
+        div.animate([
+          { transform: 'rotate(0deg)' },
+          { transform: 'rotate(360deg)' }
+        ], {
+          duration: 2000,
+          iterations: Infinity
+        });
+        divContainer.appendChild(div);
+        this.__loader = divContainer
+        document.body.appendChild(this.__loader);
+      }
+      this.__loader.style.display = "";
+    },
+    hide: function () {
+      if (this.__loader != null) {
+        this.__loader.style.display = "none";
+      }
+    }
+  }
+</script>
+
+
+
+
+{% endblock %}

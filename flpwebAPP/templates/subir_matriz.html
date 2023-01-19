@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="box">
+  <div class="container mb-5">
+    <div class="elements">
+      <!-- SI TENGO EL FORMSET, VIENE DE SUBIR MATRICES O DE EDITAR MATRICES MUESTRE EL FORMSET -->
+
+      {% if formset %}
+      <form id="myForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+          <h3 class="mb-4" style="text-align: center;">Ingresa los datos para cada matriz</h3>
+          {% for form in formset %}
+          <tr>
+            <td>
+              <ul class="list-inline">{{ form.as_ul }}</ul>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+        
+        <p style="color: red; text-align: center;" id="myText"></p>
+        <div class="submit">
+          <button type="submit" id="guardado" name="continuar" class="btn btn-primary">Continuar</button>
+        </div>
+      </form>
+      {% endif %}
+
+
+      <!-- SI TENGO FORM, VIENE DE EDITAR MATRIZ SOLO EDITAR UNA -->
+      {% if form %}
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <table>
+          {{form.as_table}}
+        </table>
+        <!-- <input type="submit" value="Submit form" > -->
+        <div class="submit">
+          <button type="submit" name="continuar" id="submit_button" class="btn btn-primary">Continuar</button>
+        </div>
+
+      </form>
+      {% endif %}
+
+
+
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      {% if errores %}
+      <p> {{errores}}</p>
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<script>
+
+
+
+$(document).ready(function () {
+  $('button').attr('disabled', 'disabled');
+});
+  let url = $(location).attr('href');
+  let url_split = url.split('/')
+  let num_matrices = parseInt(url_split[5])
+
+  //
+  function validateSum(val) {
+    // console.log("The inp: " + val);
+    square(num_matrices)
+  }
+
+  function square(num) {
+
+    let data_pesos = []
+    let pesosCompletoInput = false
+
+    for (let i = 1; i < num; i++) {
+      if ($("#id_form-" + i + "-valorPeso").val().length != "") {
+        console.log("agregar")
+        data_pesos.push(parseFloat($("#id_form-" + i + "-valorPeso").val()));
+        pesosCompletoInput = true
+      }else{
+        pesosCompletoInput = false
+      }
+    }
+    resultado = data_pesos.reduce((accumulator, currentValue) => accumulator + currentValue)
+    if (resultado != 1) {
+      $("#myText").html("La sumatoria de los pesos entre las matrices no es igual a  1");
+      // console.log("estan mal asignados los pesos " + resultado)
+      $(document).ready(function () {
+        $('button').attr('disabled', 'disabled');
+      });
+    } else {
+      if( pesosCompletoInput ){
+        console.log("esta good" + resultado)
+        $(document).ready(function () {
+          $('button').removeAttr("disabled");
+          $("#myText").html(" ");
+        });
+      }else{
+        $(document).ready(function () {
+          $('button').attr('disabled', 'disabled');
+        });
+        $("#myText").html("Debe asignarle los pesos a todas las matrices");
+        // console.log("está bien, pero no está completo los pesos " + resultado)
+      }
+    }
+
+  }
+
+
+  $(document).ready(function () {
+
+    $("#id_form-0-valorPeso").val(1);
+
+  });
+
+</script>
+
+{% endblock %}

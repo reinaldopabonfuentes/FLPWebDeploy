@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<h1 style="text-align: center;">Historial de simulaciones</h1>
+<div class="table-simulation">
+  {% if simulations %}
+    <table class="table table-bordered">
+      <thead>
+        <tr style="background-color: #fbf8f8;">
+          <th scope="col">Nombre simulaci&oacute;n</th>
+          <th scope="col">Met manual</th>
+          <th scope="col">N&uacute;mero instalaciones</th>
+          <th scope="col">Cantidad matrices</th>
+          <th scope="col">N&uacute;mero iteraciones</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Fecha creaci&oacute;n</th>
+          <th scope="col" style="text-align: center;">Acci&oacute;n</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for simulation in simulations %}
+          <tr>
+            <th>{{simulation.nombre}}</th>
+            <td>{{simulation.met_manual}}</td>
+            <td>{{simulation.no_instalaciones}}</td>
+            <td>{{simulation.cantidad_matrices}}</td>
+            <td>{{simulation.iteraciones}}</td>
+            <td>{{simulation.user.username}}</td>
+            <td>{{simulation.fecha_creacion|date:'M j Y:i'}}</td>
+            <td>
+              <center><a href="{% url 'validar_sim' simulation.id %}" style="text-align: center;">Ver simulaci&oacute;n</a></center>
+            </td>
+          </tr> 
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <h4 style="text-align: center;">No hay simulaciones para mostrar</h4>
+  {% endif %}
+</div>
+
+{% endblock %}

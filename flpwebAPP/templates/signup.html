@@ -1,0 +1,48 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box">
+    <div class="container">
+        <div class="elements">                
+            <h2>REGISTRO USUARIOS</h2>
+            <br>
+            <p>{{error}}</p>
+            <form action="/signup/" method="POST" name="user_register" autocomplete="off">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="nombreusuario">Nombre usuario</label>
+                        <input type="text" class="form-control" name="nombreusuario" id="nombreusuario"
+                            placeholder="Escriba el nombre completo">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="correousuario">Correo electr&oacute;nico</label>
+                        <input type="text" class="form-control" name="correousuario" id="correousuario"
+                            placeholder="Escriba el correo electr&oacute;nico">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="passwordusuario">Contrase&ntilde;a</label>
+                        <input type="password" class="form-control" name="passwordusuario" id="passwordusuario"
+                            placeholder="Escriba la contrase&ntilde;a">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="passwordusuario2">Ingrese nuevamente la contrase&ntilde;a</label>
+                        <input type="password" class="form-control" name="passwordusuario2" id="passwordusuario2"
+                            placeholder="Escriba la contrase&ntilde;a">
+                    </div>
+                </div>
+                <br>
+                <div class="submit">
+                    <button type="submit" name="user_register" class="btn btn-primary">Crear usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

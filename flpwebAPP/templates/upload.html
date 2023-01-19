@@ -1,0 +1,42 @@
+{% if messages %}
+    {% for message in messages %}
+        <div>
+            <strong> {{message|safe}}</strong>
+        </div>
+    {% endfor %}
+{% else %}
+
+    {{order}}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        </br>
+        <label>Sube el archivo</label>
+        <input type="file" name="file">
+        <p>Solo se aceptan arcivhos CSV</p>
+        <button type="submit">Subir</button>
+
+    </form>
+    </br>
+    </br>
+    <p> LO QUE SE HA ENVIADO</p>
+
+
+
+    <table>
+                                                
+        {% for row in numpyMatrix %}
+            <tr>
+            {% for cell in row %}
+                <td> 
+                    {{ cell }}
+            </td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+
+</table>
+    {{ numpyMatrix }}
+    <br>
+    <br>
+    {{enviado}}
+{% endif %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="box">
+  <div class="container mb-5 pt-0 px-4">
+    <div class="elements">
+      <div class="row d-flex justify-content-center">
+        <div class="col-12 ">
+          <h2 class="text-center">La simulacion se hará con los siguientes datos</h2>
+          <p style="font-size: 20px;" class="text-center">Simulacion {{sim.nombre }} - ID : {{ sim.id }}</p>
+
+
+          <div class="row justify-content-center mb-4">
+            <div class="col-auto">
+              <div class="card text-center" style="width: 18rem; background-color: #e9ecef;">
+                <div class="card-header">
+                  Parámetros de la metaheurística Recursivo Simulado
+                </div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Lambda 1: {{sim.lambda1}}</li>
+                  <li class="list-group-item">Lambda 2: {{sim.lambda2}}</li>
+                  <li class="list-group-item">Cantidad de iteraciones: {{sim.iteraciones}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <div class="submit">
+                <a href="{% url 'validar_sim' id_sim %}" class="btn btn-warning" id='{{sim.id}}'> Volver a Validación de Datos</a>
+              </div>  
+            </div>
+
+            <div class="col-auto">
+              <div class="submit">
+                <a href="{% url 'calculos' id_sim  0 %}" class="btn btn-primary">Obtener resultados</a>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="row justify-content-center">
+      <div class="col-11">
+        
+        <!-- <h1 class="mb-4" style="text-align: center;">Datos de las Matrices</h1> -->
+        <div class="row justify-content-center mb-4 ">
+          <div class="col-lg-auto col-12">
+            <h2>Calculo de pesos y datos de matrices</h2>
+          </div>
+        </div>
+
+        
+        <table class="table table-striped" style="text-align: center; border: solid 1px; border-color: #dee2e6;">
+            <thead>
+              <tr style="background-color: #fbf8f8;">
+                <th scope="col">Nombre</th>
+                <th scope="col">Matriz</th>
+                <th scope="col" style="max-width: 120px;">Signo</th>
+                <th scope="col">Tipo de Matriz</th>
+                <th scope="col">Reindexar</th>
+                {% if checkPesosManuales %}
+                <th>Peso Método Manual</th>
+                {% endif %}
+                {% if checkPesosGMWM %}
+                <th>Peso Método GMWM</th>
+                {% endif %}
+                {% if checkPesosSDWM %}
+                <th>Peso Método SDWM</th>
+                {% endif %}
+                {% if checkPesosCRITICM %}
+                <th>Peso Método CRITICM</th>
+                {% endif %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for idMatriz,nombre,matrix,signo,tipo,reindex,valorPesosManuales,valorPesosSDWM,valorPesosGMWM,valorPesosCRITICM in resultados %}
+                <tr>
+                  <th>{{nombre}}</th>
+                  <td>
+                    <div class="row justify-content-center">
+                      <div class="col-auto">
+                        <table>
+                          {% for row in matrix %}
+                              <tr>
+                              {% for cell in row %}
+                                  <td style="border: groove;"> 
+                                      {{ cell }}
+                                  </td>
+                              {% endfor %}
+                              </tr>
+                          {% endfor %}
+                      </table>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{signo}}</td>
+                  <td>{{tipo}}</td>
+                  <td>{{reindex}}</td>
+                  {% if checkPesosManuales %}
+                  <td>{{valorPesosManuales|floatformat:4}}</td>
+                  {% endif %}
+
+                  {% if checkPesosSDWM %}
+                  <td>{{valorPesosSDWM|floatformat:4}}</td>
+                  {% endif %}
+
+                  {% if checkPesosGMWM %}
+                  <td>{{valorPesosGMWM|floatformat:4}}</td>
+                  {% endif %}
+
+                  {% if checkPesosCRITICM %}
+                  <td>{{valorPesosCRITICM|floatformat:4}}</td>
+                  {% endif %}
+                </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+        
+      </div>
+    </div>
+
+    <script>
+      window.onload = (event) => {
+        console.log("page is fully loaded");
+        AmagiLoader.hide();
+      };
+      window.onbeforeunload = function (e) {
+        console.log("Se está cargando");
+        AmagiLoader.show();
+      };
+      // let refresh = document.getElementById('refresh');
+      // refresh.addEventListener('click', _ => {
+      //   location.reload();
+      // })
+    
+      const AmagiLoader = {
+        __loader: null,
+        show: function () {
+    
+          if (this.__loader == null) {
+            var divContainer = document.createElement('div');
+            divContainer.style.position = 'fixed';
+            divContainer.style.left = '0';
+            divContainer.style.top = '0';
+            divContainer.style.width = '100%';
+            divContainer.style.height = '100%';
+            divContainer.style.zIndex = '9998';
+            divContainer.style.backgroundColor = 'rgba(250, 250, 250, 0.80)';
+    
+            var div = document.createElement('div');
+            div.style.position = 'absolute';
+            div.style.left = '50%';
+            div.style.top = '50%';
+            div.style.zIndex = '9999';
+            div.style.height = '64px';
+            div.style.width = '64px';
+            div.style.margin = '-76px 0 0 -76px';
+            div.style.border = '8px solid #e1e1e1';
+            div.style.borderRadius = '50%';
+            div.style.borderTop = '8px solid #0d6efd';
+            div.animate([
+              { transform: 'rotate(0deg)' },
+              { transform: 'rotate(360deg)' }
+            ], {
+              duration: 2000,
+              iterations: Infinity
+            });
+            divContainer.appendChild(div);
+            this.__loader = divContainer
+            document.body.appendChild(this.__loader);
+          }
+          this.__loader.style.display = "";
+        },
+        hide: function () {
+          if (this.__loader != null) {
+            this.__loader.style.display = "none";
+          }
+        }
+      }
+    </script>
+
+
+{% endblock %}
